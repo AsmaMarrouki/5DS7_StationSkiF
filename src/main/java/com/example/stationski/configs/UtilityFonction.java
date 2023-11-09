@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.Period;
 
 public class UtilityFonction {
-
+    private UtilityFonction() {
+        throw new IllegalStateException("Utility class");
+    }
     public static int calculateAge(LocalDate dob)
     {
 

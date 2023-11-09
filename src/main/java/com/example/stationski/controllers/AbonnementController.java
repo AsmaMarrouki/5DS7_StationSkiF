@@ -1,8 +1,6 @@
 package com.example.stationski.controllers;
 
 import com.example.stationski.entities.Abonnement;
-import com.example.stationski.entities.Inscription;
-import com.example.stationski.entities.Moniteur;
 import com.example.stationski.entities.TypeAbonnement;
 import com.example.stationski.services.IAbonnementService;
 import lombok.AllArgsConstructor;
@@ -24,8 +22,8 @@ public class AbonnementController {
     // http://localhost:8089/stationSki/abonnement/retrieve-all-abonnementBytype/MENSUEL
     @GetMapping("/retrieve-all-abonnementBytype/{typeAbonnement}")
     public Set<Abonnement> getAbonnementsBytype(@PathVariable("typeAbonnement") TypeAbonnement typeAbonnement) {
-        Set<Abonnement> listAbonnement = abonnementService.getAbonnementByType(typeAbonnement);
-        return listAbonnement;
+
+        return abonnementService.getAbonnementByType(typeAbonnement);
     }
 
     // http://localhost:8089/stationSki/abonnement/getAbonnementsByDates/2020-01-01/2023-12-31

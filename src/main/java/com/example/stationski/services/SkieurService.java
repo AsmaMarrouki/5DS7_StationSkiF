@@ -8,10 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.EnumMap;
+
 
 @Service
 @AllArgsConstructor
@@ -37,23 +38,18 @@ public class SkieurService implements ISkieurService{
     @Transactional
     public Skieur addSkieurAndAssignToCourse(Skieur skieur, Long numCourse) {
         log.info("debut methode addSkieurAndAssignToCourse");
-        Skieur.builder().nomS("sahli").numSkieur(123L).build();
-        // t1 = date systeme
+
         Cours cours = coursRepository.findByNumCours(numCourse);
         Skieur s = skieurRepository.save(skieur);
-        Set<Inscription> inscriptions = new HashSet<>();
-        inscriptions= s.getInscriptions();
-        inscriptions.stream().forEach(
-                inscription ->  {
-                    inscription.setCours(cours);
-                  //  inscription.setSkieur(s);
-                }
+        Set<Inscription> inscriptions = s.getInscriptions();
 
-        );
+        inscriptions.forEach(inscription -> inscription.setCours(cours));
+
         log.info("fin methode addSkieurAndAssignToCourse");
-      //  t2= date sys - t1
+        // t2= date sys - t1
         return null;
     }
+
 
     @Override
     public List<Skieur> retrieveSkieursByTypeAbonnement(TypeAbonnement typeAbonnement) {
@@ -61,11 +57,10 @@ public class SkieurService implements ISkieurService{
     }
 
     @Override
-    public HashMap<Couleur,Integer> nombreSkieursParCouleurPiste() {
+    public EnumMap<Couleur, Integer> nombreSkieursParCouleurPiste() {
         log.info("debut methode nombreSkieursParCouleurPiste");
-        HashMap<Couleur,Integer> nombreSkieursParCouleurPiste = new HashMap<>();
-        Couleur couleurs[] = Couleur.values();
-        for(Couleur c: couleurs) {
+        EnumMap<Couleur, Integer> nombreSkieursParCouleurPiste = new EnumMap<>(Couleur.class);
+        for(Couleur c: Couleur.values()) {
             nombreSkieursParCouleurPiste.put(c,skieurRepository.skieursByCouleurPiste(c).size());
 
         }
@@ -73,4 +68,6 @@ public class SkieurService implements ISkieurService{
 
         return nombreSkieursParCouleurPiste;
     }
+
+
 }

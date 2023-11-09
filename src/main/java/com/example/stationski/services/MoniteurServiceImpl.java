@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -35,7 +36,8 @@ public class MoniteurServiceImpl implements IMoniteurService{
 
     @Override
     public Moniteur retrieveMoniteur(Integer idMoniteur) {
-        return moniteurRepository.findById(idMoniteur).get();
+        Optional<Moniteur> optionalMoniteur = moniteurRepository.findById(idMoniteur);
+        return optionalMoniteur.orElse(null);
     }
 
     @Override
@@ -45,9 +47,7 @@ public class MoniteurServiceImpl implements IMoniteurService{
 
     @Transactional
     public Moniteur addMoniteurAndAssignToCourse(Moniteur moniteur) {
-        Moniteur m1 = Moniteur.builder().build();
-        Moniteur m = moniteurRepository.save(moniteur);
-        return m;
+        return moniteurRepository.save(moniteur);
     }
 
     @Override

@@ -1,14 +1,11 @@
 package com.example.stationski.controllers;
 
 import com.example.stationski.entities.Inscription;
-import com.example.stationski.entities.Skieur;
 import com.example.stationski.entities.Support;
 import com.example.stationski.services.IInscriptionService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -24,8 +21,8 @@ public class InscriptionController {
     public Inscription addSkieurAndAssignToCourse(@RequestBody Inscription inscription,
                                                   @PathVariable("numSkieur")Long numSkieur,
                                                   @PathVariable("numCours")Long numCours) {
-        Inscription ins = inscriptionService.addInscriptionAndAssignToSkieurAndCourse(inscription,numSkieur,numCours);
-        return ins;
+
+        return inscriptionService.addInscriptionAndAssignToSkieurAndCourse(inscription,numSkieur,numCours);
     }
 
     // http://localhost:8089/stationSki/inscription/assignInscriptionToCours/4/27

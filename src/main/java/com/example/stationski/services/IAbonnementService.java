@@ -1,7 +1,6 @@
 package com.example.stationski.services;
 
 import com.example.stationski.entities.Abonnement;
-import com.example.stationski.entities.Inscription;
 import com.example.stationski.entities.TypeAbonnement;
 
 import java.time.LocalDate;
@@ -13,5 +12,4 @@ public interface IAbonnementService {
 
     List<Abonnement> retrieveAbonnementByDates(LocalDate startDate, LocalDate endDate);
 
- //   public void retrieveAbonnements();
 }

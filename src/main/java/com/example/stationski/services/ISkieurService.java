@@ -4,8 +4,7 @@ import com.example.stationski.entities.Couleur;
 import com.example.stationski.entities.Skieur;
 import com.example.stationski.entities.TypeAbonnement;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.EnumMap;
 import java.util.List;
 
 public interface ISkieurService {
@@ -16,7 +15,7 @@ public interface ISkieurService {
 
     List<Skieur> retrieveSkieursByTypeAbonnement(TypeAbonnement typeAbonnement);
 
-    HashMap<Couleur,Integer>  nombreSkieursParCouleurPiste();
+    EnumMap<Couleur, Integer> nombreSkieursParCouleurPiste();
 
 
 }

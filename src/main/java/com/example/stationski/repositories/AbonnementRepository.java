@@ -1,9 +1,7 @@
 package com.example.stationski.repositories;
 
 import com.example.stationski.entities.Abonnement;
-import com.example.stationski.entities.Inscription;
 import com.example.stationski.entities.TypeAbonnement;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
