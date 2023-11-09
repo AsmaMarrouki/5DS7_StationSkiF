@@ -24,7 +24,7 @@ public class MoniteurRestController {
     // http://localhost:8089/stationSki/moniteur/retrieve-all-moniteurs
     @Operation(description = "liste des moniteurs")
     @GetMapping("/retrieve-all-moniteurs")
-    public List<Moniteur> getAbonnements() {
+    public List<Moniteur> getMoniteur() {
         List<Moniteur> moniteurs = moniteurService.retrieveAllMoniteurs();
 
         for (Moniteur moniteur : moniteurs) {
