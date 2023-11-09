@@ -25,14 +25,13 @@ public class MoniteurRestController {
     @Operation(description = "liste des moniteurs")
     @GetMapping("/retrieve-all-moniteurs")
     public List<Moniteur> getAbonnements() {
-
         List<Moniteur> moniteurs = moniteurService.retrieveAllMoniteurs();
 
         for (Moniteur moniteur : moniteurs) {
             System.out.println("Nom: " + moniteur.getNomM() + ", Prénom: " + moniteur.getPrenomM());
         }
 
-        return moniteurs;
+        return moniteurService.retrieveAllMoniteurs();
 
     }
 
