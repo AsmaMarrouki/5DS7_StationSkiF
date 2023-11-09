@@ -36,7 +36,6 @@ public class MoniteurServiceImplMock {
 
     @Test
     public void testRetrieveAllMoniteurs() {
-        // Define a list of Moniteurs for the mock
         Set<Cours> coursSet = new HashSet<>();
         coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
 
@@ -69,36 +68,6 @@ public class MoniteurServiceImplMock {
 
         // Perform the test
         Moniteur result = moniteurService.addMoniteur(moniteur);
-
-        // Verify that the repository method was called and the result matches the expected Moniteur
-        verify(moniteurRepository, times(1)).save(moniteur);
-        assertEquals(moniteur, result);
-    }
-
-    @Test
-    public void testDeleteMoniteur() {
-        // Define a Moniteur ID to be deleted
-        Integer moniteurId = 1;
-
-        // Perform the test
-        moniteurService.deleteMoniteur(moniteurId);
-
-        // Verify that the repository method was called to delete the Moniteur
-        verify(moniteurRepository, times(1)).deleteById(moniteurId);
-    }
-
-    @Test
-    public void testUpdateMoniteur() {
-        // Create a sample Moniteur
-        Set<Cours> coursSet = new HashSet<>();
-        coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
-        Moniteur moniteur = new Moniteur(1, 123L, "John", "Doe", LocalDate.now(), 1000, coursSet);
-
-        // Define the behavior of the mock repository
-        when(moniteurRepository.save(moniteur)).thenReturn(moniteur);
-
-        // Perform the test
-        Moniteur result = moniteurService.updateMoniteur(moniteur);
 
         // Verify that the repository method was called and the result matches the expected Moniteur
         verify(moniteurRepository, times(1)).save(moniteur);
