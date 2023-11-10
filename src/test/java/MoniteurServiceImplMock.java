@@ -11,14 +11,15 @@ import com.example.stationski.entities.TypeCours;
 import com.example.stationski.repositories.CoursRepository;
 import com.example.stationski.repositories.MoniteurRepository;
 import com.example.stationski.services.MoniteurServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+class MoniteurServiceImplMock {
 
-public class MoniteurServiceImplMock {
+    private static Moniteur moniteur1;
+    private static Moniteur moniteur2;
 
     @InjectMocks
     private MoniteurServiceImpl moniteurService;
@@ -26,108 +27,76 @@ public class MoniteurServiceImplMock {
     @Mock
     private MoniteurRepository moniteurRepository;
 
-    @Mock
-    private CoursRepository coursRepository;
+
+
+    @BeforeAll
+    static void setUp() {
+        Set<Cours> coursSet = new HashSet<>();
+        coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
+
+        moniteur1 = Moniteur.builder().idMoniteur(1).numMoniteur(123L).nomM("nasri").prenomM("youssef").dateRecru(LocalDate.now()).prime(1000).coursSet(coursSet).build();
+        moniteur2 = Moniteur.builder().idMoniteur(2).numMoniteur(456L).nomM("nasri").prenomM("yahya").dateRecru(LocalDate.now()).prime(1500).coursSet(coursSet).build();
+    }
 
     @BeforeEach
-    public void setUp() {
+    public void initMocks() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testRetrieveAllMoniteurs() {
-        // Define a list of Moniteurs for the mock
-        Set<Cours> coursSet = new HashSet<>();
-        coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
-
-        Moniteur moniteur1 = new Moniteur(1, 123L, "John", "Doe", LocalDate.now(), 1000, coursSet);
-        Moniteur moniteur2 = new Moniteur(2, 456L, "Jane", "Smith", LocalDate.now(), 1500, coursSet);
+    void testRetrieveAllMoniteurs() {
         Set<Moniteur> moniteurs = new HashSet<>();
         moniteurs.add(moniteur1);
         moniteurs.add(moniteur2);
 
-        // Define the behavior of the mock repository
         when(moniteurRepository.findAll()).thenReturn(new ArrayList<>(moniteurs));
 
-        // Perform the test
         Set<Moniteur> result = new HashSet<>(moniteurService.retrieveAllMoniteurs());
 
-        // Verify that the repository method was called and the result matches the expected set
         verify(moniteurRepository, times(1)).findAll();
         assertEquals(moniteurs, result);
     }
 
     @Test
-    public void testAddMoniteur() {
-        // Create a sample Moniteur
-        Set<Cours> coursSet = new HashSet<>();
-        coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
-        Moniteur moniteur = new Moniteur(null, 123L, "John", "Doe", LocalDate.now(), 1000, coursSet);
+    void testAddMoniteur() {
 
-        // Define the behavior of the mock repository
-        when(moniteurRepository.save(moniteur)).thenReturn(moniteur);
+        when(moniteurRepository.save(moniteur1)).thenReturn(moniteur1);
 
-        // Perform the test
-        Moniteur result = moniteurService.addMoniteur(moniteur);
+        Moniteur result = moniteurService.addMoniteur(moniteur1);
 
-        // Verify that the repository method was called and the result matches the expected Moniteur
-        verify(moniteurRepository, times(1)).save(moniteur);
-        assertEquals(moniteur, result);
+        verify(moniteurRepository, times(1)).save(moniteur1);
+        assertEquals(moniteur1, result);
     }
 
     @Test
-    public void testDeleteMoniteur() {
-        // Define a Moniteur ID to be deleted
+    void testDeleteMoniteur() {
         Integer moniteurId = 1;
 
-        // Perform the test
         moniteurService.deleteMoniteur(moniteurId);
 
-        // Verify that the repository method was called to delete the Moniteur
         verify(moniteurRepository, times(1)).deleteById(moniteurId);
     }
 
     @Test
-    public void testUpdateMoniteur() {
-        // Create a sample Moniteur
-        Set<Cours> coursSet = new HashSet<>();
-        coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
-        Moniteur moniteur = new Moniteur(1, 123L, "John", "Doe", LocalDate.now(), 1000, coursSet);
+    void testUpdateMoniteur() {
+        when(moniteurRepository.save(moniteur1)).thenReturn(moniteur1);
 
-        // Define the behavior of the mock repository
-        when(moniteurRepository.save(moniteur)).thenReturn(moniteur);
+        Moniteur result = moniteurService.updateMoniteur(moniteur1);
 
-        // Perform the test
-        Moniteur result = moniteurService.updateMoniteur(moniteur);
-
-        // Verify that the repository method was called and the result matches the expected Moniteur
-        verify(moniteurRepository, times(1)).save(moniteur);
-        assertEquals(moniteur, result);
+        verify(moniteurRepository, times(1)).save(moniteur1);
+        assertEquals(moniteur1, result);
     }
 
     @Test
-    public void testRetrieveMoniteur() {
-        // Define a Moniteur ID to be retrieved
+    void testRetrieveMoniteur() {
         Integer moniteurId = 1;
+        Optional<Moniteur> optionalMoniteur = Optional.of(moniteur1);
 
-        // Create a sample Moniteur
-        Set<Cours> coursSet = new HashSet<>();
-        coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
-        Moniteur moniteur = new Moniteur(moniteurId, 123L, "John", "Doe", LocalDate.now(), 1000, coursSet);
-        Optional<Moniteur> optionalMoniteur = Optional.of(moniteur);
-
-        // Define the behavior of the mock repository
         when(moniteurRepository.findById(moniteurId)).thenReturn(optionalMoniteur);
 
-        // Perform the test
         Moniteur result = moniteurService.retrieveMoniteur(moniteurId);
 
-        // Verify that the repository method was called and the result matches the expected Moniteur
         verify(moniteurRepository, times(1)).findById(moniteurId);
-        assertEquals(moniteur, result);
+        assertEquals(moniteur1, result);
     }
-
 }
-
-
-

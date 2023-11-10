@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = StationSkiApplication.class)
 @SpringJUnitConfig
-public class MoniteurServiceImplTest {
+class MoniteurServiceImplTest {
 
     @Autowired
     private MoniteurServiceImpl moniteurService;
@@ -34,23 +34,21 @@ public class MoniteurServiceImplTest {
     private CoursRepository coursRepository;
 
     @Test
-    public void testAddMoniteur() {
+    void testAddMoniteur() {
+
         Set<Cours> coursSet = new HashSet<>();
         coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
-        Moniteur moniteur = new Moniteur(1, 123L, "John", "Doe", LocalDate.now(), 1000, coursSet);
+        Moniteur moniteur = new Moniteur(1, 123L, "marrouki", "asma", LocalDate.now(), 1000, coursSet);
 
-        // Perform the test
         Moniteur result = moniteurService.addMoniteur(moniteur);
 
 
-        // Check if the Moniteur has a non-null ID before accessing it
-        if (result != null) {
+         if (result != null) {
             assertNotNull(result.getIdMoniteur(), "ID should not be null after insertion");
             assertEquals(moniteur.getNomM(), result.getNomM(), "Names should match");
             assertEquals(moniteur.getPrenomM(), result.getPrenomM(), "Surnames should match");
         }
 
-        // Cleanup: Delete the inserted Moniteur from the database
         if (result != null) {
             moniteurService.deleteMoniteur(result.getIdMoniteur());
         }
