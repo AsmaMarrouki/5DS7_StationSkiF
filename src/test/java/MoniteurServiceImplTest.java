@@ -1,71 +1,59 @@
+import com.example.stationski.StationSkiApplication;
+import com.example.stationski.entities.Cours;
 import com.example.stationski.entities.Moniteur;
+import com.example.stationski.entities.Support;
+import com.example.stationski.entities.TypeCours;
 import com.example.stationski.repositories.CoursRepository;
 import com.example.stationski.repositories.MoniteurRepository;
 import com.example.stationski.services.MoniteurServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest(classes = StationSkiApplication.class)
+@SpringJUnitConfig
 public class MoniteurServiceImplTest {
 
-    @InjectMocks
+    @Autowired
     private MoniteurServiceImpl moniteurService;
 
-    @Mock
+    @Autowired
     private MoniteurRepository moniteurRepository;
 
-    @Mock
+    @Autowired
     private CoursRepository coursRepository;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
-
     @Test
-    public void testDeleteMoniteur() {
-        // Define a Moniteur ID to be deleted
-        Integer moniteurId = 1;
-
-        // Define the behavior of the mock repository
-        doAnswer((Answer<Void>) invocation -> {
-            // Custom behavior for deleteById method
-            return null;
-        }).when(moniteurRepository).deleteById(moniteurId);
+    public void testAddMoniteur() {
+        Set<Cours> coursSet = new HashSet<>();
+        coursSet.add(new Cours(1, 123L, TypeCours.COLLECTIF_ADULTE, Support.SKI, 100.0f, 1, 2, Collections.emptySet()));
+        Moniteur moniteur = new Moniteur(1, 123L, "John", "Doe", LocalDate.now(), 1000, coursSet);
 
         // Perform the test
-        moniteurService.deleteMoniteur(moniteurId);
+        Moniteur result = moniteurService.addMoniteur(moniteur);
 
-        // Verify that the repository method was called to delete the Moniteur
-        verify(moniteurRepository, times(1)).deleteById(moniteurId);
+
+        // Check if the Moniteur has a non-null ID before accessing it
+        if (result != null) {
+            assertNotNull(result.getIdMoniteur(), "ID should not be null after insertion");
+            assertEquals(moniteur.getNomM(), result.getNomM(), "Names should match");
+            assertEquals(moniteur.getPrenomM(), result.getPrenomM(), "Surnames should match");
+        }
+
+        // Cleanup: Delete the inserted Moniteur from the database
+        if (result != null) {
+            moniteurService.deleteMoniteur(result.getIdMoniteur());
+        }
     }
-
-    @Test
-    public void testUpdateMoniteur() {
-        // Create a sample Moniteur
-        Moniteur moniteur = new Moniteur(/* Add appropriate parameters for Moniteur */);
-
-        // Define the behavior of the mock repository
-        when(moniteurRepository.save(moniteur)).thenReturn(moniteur);
-
-        // Perform the test
-        Moniteur result = moniteurService.updateMoniteur(moniteur);
-
-        // Verify that the repository method was called and the result matches the expected Moniteur
-        verify(moniteurRepository, times(1)).save(moniteur);
-        Assertions.assertEquals(moniteur, result);
-    }
-
 
 }

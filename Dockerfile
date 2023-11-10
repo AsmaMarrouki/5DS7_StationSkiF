@@ -1,3 +1,4 @@
+#système léger qui contient jdk
 FROM openjdk:11
 
 # Set the Nexus URL and the artifact path
